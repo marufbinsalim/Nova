@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Cube() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <mesh rotation={[0.4, 0.2, 0]}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="royalblue" />
+    </mesh>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <div style={{ width: "100%", height: "100%" }}>
+      <Canvas camera={{ position: [3, 3, 3] }}>
+        {/* Lights */}
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1} />
+
+        {/* Cube */}
+        <Cube />
+
+        {/* Mouse controls */}
+        <OrbitControls />
+      </Canvas>
+    </div>
+  );
+}
