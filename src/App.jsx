@@ -1,29 +1,35 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-
-function Cube() {
-  return (
-    <mesh rotation={[0.4, 0.2, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="royalblue" />
-    </mesh>
-  );
-}
+import { Physics, RigidBody } from "@react-three/rapier";
 
 export default function App() {
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Canvas camera={{ position: [3, 3, 3] }}>
-        {/* Lights */}
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
+    <Canvas camera={{ position: [6, 6, 6], fov: 50 }}>
+      {/* Lighting */}
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
 
-        {/* Cube */}
-        <Cube />
+      {/* Controls */}
+      <OrbitControls />
 
-        {/* Mouse controls */}
-        <OrbitControls />
-      </Canvas>
-    </div>
+      {/* Physics world */}
+      <Physics gravity={[0, -9.81, 0]}>
+        {/* Falling cube */}
+        <RigidBody>
+          <mesh position={[0, 5, 0]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="royalblue" />
+          </mesh>
+        </RigidBody>
+
+        {/* Ground plane */}
+        <RigidBody type="fixed" colliders="cuboid">
+          <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+            <planeGeometry args={[20, 20]} />
+            <meshStandardMaterial color="lightgreen" />
+          </mesh>
+        </RigidBody>
+      </Physics>
+    </Canvas>
   );
 }
